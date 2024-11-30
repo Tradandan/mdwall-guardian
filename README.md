@@ -1,69 +1,149 @@
-# Welcome to your Lovable project
+# Cybersecurity Dashboard
 
-## Project info
+## Installation Guide
 
-**URL**: https://lovable.dev/projects/32a8ef61-8a13-48e2-b1ce-cdce9419d98d
+### Prerequisites
+- Node.js 16+ and npm (Install via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+- Git
 
-## How can I edit this code?
+### Local Development Setup
+```bash
+# Clone the repository
+git clone <repository-url>
 
-There are several ways of editing your application.
+# Navigate to project directory
+cd <project-directory>
 
-**Use Lovable**
+# Install dependencies
+npm install
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/32a8ef61-8a13-48e2-b1ce-cdce9419d98d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Production Deployment (AWS Ubuntu)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. **Setup Ubuntu Server**
+```bash
+# Update system
+sudo apt update && sudo apt upgrade -y
 
-**Use GitHub Codespaces**
+# Install Node.js and npm
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Install PM2 for process management
+sudo npm install -g pm2
+```
 
-## What technologies are used for this project?
+2. **Deploy Application**
+```bash
+# Clone repository
+git clone <repository-url>
+cd <project-directory>
 
-This project is built with .
+# Install dependencies
+npm install
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Build for production
+npm run build
 
-## How can I deploy this project?
+# Start with PM2
+pm2 start npm --name "cybersecurity-dashboard" -- start
+```
 
-Simply open [Lovable](https://lovable.dev/projects/32a8ef61-8a13-48e2-b1ce-cdce9419d98d) and click on Share -> Publish.
+3. **Setup Nginx (Recommended)**
+```bash
+# Install Nginx
+sudo apt install nginx
 
-## I want to use a custom domain - is that possible?
+# Configure Nginx
+sudo nano /etc/nginx/sites-available/cybersecurity-dashboard
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+# Add this configuration:
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+
+# Enable the site
+sudo ln -s /etc/nginx/sites-available/cybersecurity-dashboard /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+4. **SSL Setup (Optional but Recommended)**
+```bash
+# Install Certbot
+sudo apt install certbot python3-certbot-nginx
+
+# Get SSL certificate
+sudo certbot --nginx -d your-domain.com
+```
+
+5. **Firewall Configuration**
+```bash
+# Configure UFW
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
+```
+
+### Environment Variables
+Create a `.env` file in the root directory:
+```
+VITE_API_URL=your-api-url
+VITE_AUTH_KEY=your-auth-key
+```
+
+### Monitoring
+```bash
+# View logs
+pm2 logs
+
+# Monitor application
+pm2 monit
+
+# View status
+pm2 status
+```
+
+### Updating the Application
+```bash
+# Pull latest changes
+git pull
+
+# Install any new dependencies
+npm install
+
+# Rebuild
+npm run build
+
+# Restart the application
+pm2 restart cybersecurity-dashboard
+```
+
+## Features
+- Firewall Rules Management
+- Network Traffic Analysis
+- System Status Monitoring
+- Threat Intelligence
+- Real-time Alerts
+
+## Security Considerations
+- Always use HTTPS in production
+- Regularly update dependencies
+- Implement proper authentication
+- Monitor system logs
+- Keep the Ubuntu system updated
+
+For more details or support, please refer to the documentation or open an issue.
