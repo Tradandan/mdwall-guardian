@@ -1,29 +1,8 @@
 # Cybersecurity Dashboard
 
-## Installation Guide
+## AWS Ubuntu Installation Guide
 
-### Prerequisites
-- Node.js 16+ and npm (Install via [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
-- Git
-
-### Local Development Setup
-```bash
-# Clone the repository
-git clone <repository-url>
-
-# Navigate to project directory
-cd <project-directory>
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-```
-
-### Production Deployment (AWS Ubuntu)
-
-1. **Setup Ubuntu Server**
+### 1. Prerequisites
 ```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
@@ -32,15 +11,15 @@ sudo apt update && sudo apt upgrade -y
 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt install -y nodejs
 
-# Install PM2 for process management
+# Install PM2 globally
 sudo npm install -g pm2
 ```
 
-2. **Deploy Application**
+### 2. Application Setup
 ```bash
 # Clone repository
-git clone <repository-url>
-cd <project-directory>
+git clone <your-repository-url>
+cd cybersecurity-dashboard
 
 # Install dependencies
 npm install
@@ -52,15 +31,15 @@ npm run build
 pm2 start npm --name "cybersecurity-dashboard" -- start
 ```
 
-3. **Setup Nginx (Recommended)**
+### 3. Nginx Setup
 ```bash
 # Install Nginx
 sudo apt install nginx
 
-# Configure Nginx
+# Create Nginx config
 sudo nano /etc/nginx/sites-available/cybersecurity-dashboard
 
-# Add this configuration:
+# Add configuration:
 server {
     listen 80;
     server_name your-domain.com;
@@ -75,13 +54,13 @@ server {
     }
 }
 
-# Enable the site
+# Enable site
 sudo ln -s /etc/nginx/sites-available/cybersecurity-dashboard /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-4. **SSL Setup (Optional but Recommended)**
+### 4. SSL Setup (Recommended)
 ```bash
 # Install Certbot
 sudo apt install certbot python3-certbot-nginx
@@ -90,19 +69,11 @@ sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d your-domain.com
 ```
 
-5. **Firewall Configuration**
+### 5. Firewall Setup
 ```bash
-# Configure UFW
 sudo ufw allow OpenSSH
 sudo ufw allow 'Nginx Full'
 sudo ufw enable
-```
-
-### Environment Variables
-Create a `.env` file in the root directory:
-```
-VITE_API_URL=your-api-url
-VITE_AUTH_KEY=your-auth-key
 ```
 
 ### Monitoring
@@ -117,33 +88,19 @@ pm2 monit
 pm2 status
 ```
 
-### Updating the Application
+### Environment Variables
+Create `.env` file:
+```
+VITE_API_URL=your-api-url
+VITE_AUTH_KEY=your-auth-key
+```
+
+### Updating Application
 ```bash
-# Pull latest changes
 git pull
-
-# Install any new dependencies
 npm install
-
-# Rebuild
 npm run build
-
-# Restart the application
 pm2 restart cybersecurity-dashboard
 ```
 
-## Features
-- Firewall Rules Management
-- Network Traffic Analysis
-- System Status Monitoring
-- Threat Intelligence
-- Real-time Alerts
-
-## Security Considerations
-- Always use HTTPS in production
-- Regularly update dependencies
-- Implement proper authentication
-- Monitor system logs
-- Keep the Ubuntu system updated
-
-For more details or support, please refer to the documentation or open an issue.
+For support, please open an issue in the repository.
