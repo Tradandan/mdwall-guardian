@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CircleOff, Shield, Activity, Cpu } from "lucide-react";
+import { CircleOff, Shield, Activity, Cpu, Network, Database, Users } from "lucide-react";
 
 export const SystemStatus = () => {
   return (
@@ -31,6 +31,24 @@ export const SystemStatus = () => {
             icon={Cpu}
             label="System Load"
             status="Normal"
+            statusColor="text-cyber-alert-success"
+          />
+          <StatusItem
+            icon={Network}
+            label="Network Status"
+            status="Optimal"
+            statusColor="text-cyber-alert-success"
+          />
+          <StatusItem
+            icon={Database}
+            label="Database"
+            status="Connected"
+            statusColor="text-cyber-alert-success"
+          />
+          <StatusItem
+            icon={Users}
+            label="Active Users"
+            status="15"
             statusColor="text-cyber-alert-success"
           />
         </div>
