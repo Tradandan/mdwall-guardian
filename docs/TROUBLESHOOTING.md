@@ -17,7 +17,19 @@
 - Check deployment platform logs
 - Ensure all environment variables are set
 
+### 4. System Monitoring
+- Ensure proper permissions for monitoring tools
+- Verify network connectivity
+- Check firewall configurations
+- Validate system logging settings
+
+### 5. Demo Mode
+- If using demo mode, data is simulated
+- Real monitoring requires Linux system configuration
+- Ensure required system tools are installed for production use
+
 ## Getting Help
 If you encounter any issues not covered here, please:
 1. Check the existing issues in the repository
 2. Open a new issue with detailed information about your problem
+3. Include system configuration details when reporting issues

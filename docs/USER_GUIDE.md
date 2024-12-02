@@ -1,10 +1,13 @@
 # User Guide
 
 ## System Requirements
-- Administrative access to monitored systems
-- Network connectivity to all monitored endpoints
-- Proper firewall configurations
-- System logging enabled
+- Modern web browser with JavaScript enabled
+- For production deployment:
+  - Linux operating system
+  - Administrative access
+  - Network connectivity
+  - Proper firewall configurations
+  - System logging enabled
 
 ## Authentication
 1. Access requires proper authentication credentials
@@ -54,3 +57,9 @@
 2. Frequent log review
 3. Alert configuration maintenance
 4. Backup management
+
+## Demo Mode
+The dashboard includes a demonstration mode that simulates system monitoring
+data. This allows you to evaluate the interface and functionality without
+requiring actual system access. For production deployment, configure the
+system to use actual monitoring tools.
