@@ -3,78 +3,179 @@
 ## 1. Prerequisites
 
 ```bash
+# Switch to root if needed
+sudo su -
+
 # Update system
-sudo dnf update -y
+dnf update -y
 
-# Install Node.js and npm
-sudo dnf install -y nodejs npm
+# Install Node.js (LTS version)
+dnf install -y nodejs npm
 
-# Install development tools (needed for some npm packages)
-sudo dnf groupinstall "Development Tools" -y
+# Verify installations
+node --version
+npm --version
+
+# Install development tools
+dnf groupinstall "Development Tools" -y
+
+# Install git
+dnf install -y git
 
 # Install PM2 globally
-sudo npm install -g pm2
+npm install -g pm2
 ```
 
 ## 2. Application Setup
+
 ```bash
-# Clone repository
-git clone <your-repository-url>
-cd cybersecurity-dashboard
+# Create directory for application
+mkdir -p /var/www/cybersecurity-dashboard
+cd /var/www/cybersecurity-dashboard
+
+# Clone repository (replace with your repository URL)
+git clone <your-repository-url> .
 
 # Install dependencies
-npm install
+npm install --legacy-peer-deps
 
-# Build for production
+# Create production build
 npm run build
 
-# Start with PM2
+# Start application with PM2
 pm2 start npm --name "cybersecurity-dashboard" -- start
+
+# Ensure PM2 starts on system reboot
+pm2 startup
+pm2 save
 ```
 
-## 3. Nginx Setup (Optional)
+## 3. Nginx Setup
+
 ```bash
 # Install Nginx
-sudo dnf install nginx -y
+dnf install -y nginx
 
-# Start Nginx
-sudo systemctl start nginx
-sudo systemctl enable nginx
+# Start and enable Nginx
+systemctl start nginx
+systemctl enable nginx
 
-# Configure firewall (if enabled)
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --permanent --add-service=https
-sudo firewall-cmd --reload
+# Create Nginx configuration
+cat > /etc/nginx/conf.d/cybersecurity-dashboard.conf << 'EOL'
+server {
+    listen 80;
+    server_name your-domain.com;  # Replace with your domain
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+EOL
+
+# Test Nginx configuration
+nginx -t
+
+# If test passes, reload Nginx
+systemctl reload nginx
+
+# Configure firewall
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+firewall-cmd --reload
 ```
 
-## 4. SSL Configuration (Optional)
+## 4. SSL Configuration
+
 ```bash
 # Install certbot
-sudo dnf install certbot python3-certbot-nginx -y
+dnf install -y certbot python3-certbot-nginx
 
-# Get SSL certificate
-sudo certbot --nginx -d yourdomain.com
+# Obtain SSL certificate (replace with your domain)
+certbot --nginx -d your-domain.com
+
+# Auto-renewal is installed by default
 ```
 
-## Troubleshooting
+## 5. Common Issues & Troubleshooting
 
-1. If npm install fails:
-   ```bash
-   # Clear npm cache
-   npm cache clean --force
-   
-   # Try installing with legacy peer deps
-   npm install --legacy-peer-deps
-   ```
-
-2. If port 3000 is in use:
-   ```bash
-   # Find process using port 3000
-   sudo lsof -i :3000
-   
-   # Kill the process
-   sudo kill -9 <PID>
-   ```
-
-For complete setup instructions including advanced Nginx configuration, please refer to our [detailed AWS guide](https://docs.example.com/aws-setup).
+### Node.js Version Issues
+```bash
+# If you need a different Node.js version:
+dnf module list nodejs
+dnf module reset nodejs
+dnf module enable nodejs:18
+dnf install -y nodejs
 ```
+
+### NPM Install Failures
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Try installing with legacy peer deps
+npm install --legacy-peer-deps
+
+# If you get EACCES errors:
+chown -R $USER:$GROUP ~/.npm
+chown -R $USER:$GROUP ~/.config
+```
+
+### Port Issues
+```bash
+# Check if port 3000 is in use
+lsof -i :3000
+
+# Kill process if needed
+kill -9 <PID>
+```
+
+### Permission Issues
+```bash
+# Set correct ownership
+chown -R $USER:$USER /var/www/cybersecurity-dashboard
+
+# Set correct permissions
+chmod -R 755 /var/www/cybersecurity-dashboard
+```
+
+### SELinux Issues
+```bash
+# If using SELinux, allow Nginx to proxy
+setsebool -P httpd_can_network_connect 1
+```
+
+## 6. Monitoring
+
+```bash
+# Monitor application logs
+pm2 logs
+
+# Monitor Nginx logs
+tail -f /var/log/nginx/error.log
+tail -f /var/log/nginx/access.log
+
+# Check application status
+pm2 status
+```
+
+## 7. Backup & Maintenance
+
+```bash
+# Backup Nginx configuration
+cp -r /etc/nginx/conf.d /etc/nginx/conf.d.backup
+
+# Backup SSL certificates
+cp -r /etc/letsencrypt /etc/letsencrypt.backup
+
+# Regular updates
+dnf update -y
+npm update
+pm2 update
+```
+
+For additional support or custom configurations, please open an issue in the repository.
