@@ -1,7 +1,35 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CircleOff, Shield, Activity, Cpu, Network, Database, Users } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { getSystemMetrics, SystemMetrics } from "@/utils/systemMonitor";
+import { useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export const SystemStatus = () => {
+  const { toast } = useToast();
+  
+  const { data: metrics, error } = useQuery({
+    queryKey: ['systemMetrics'],
+    queryFn: getSystemMetrics,
+    refetchInterval: 5000, // Refresh every 5 seconds
+  });
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch system metrics. Ensure monitoring tools are installed.",
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
+  const getStatusColor = (value: number) => {
+    if (value > 90) return "text-cyber-alert-critical";
+    if (value > 70) return "text-cyber-alert-warning";
+    return "text-cyber-alert-success";
+  };
+
   return (
     <Card className="p-4">
       <CardHeader>
@@ -12,44 +40,32 @@ export const SystemStatus = () => {
           <StatusItem
             icon={Shield}
             label="Firewall"
-            status="Active"
+            status={metrics ? "Active" : "Checking..."}
             statusColor="text-cyber-alert-success"
           />
           <StatusItem
             icon={Activity}
             label="IDS/IPS"
-            status="Monitoring"
+            status={metrics ? "Monitoring" : "Checking..."}
             statusColor="text-cyber-alert-success"
-          />
-          <StatusItem
-            icon={CircleOff}
-            label="Threats Blocked"
-            status="23 Today"
-            statusColor="text-cyber-alert-warning"
           />
           <StatusItem
             icon={Cpu}
-            label="System Load"
-            status="Normal"
-            statusColor="text-cyber-alert-success"
-          />
-          <StatusItem
-            icon={Network}
-            label="Network Status"
-            status="Optimal"
-            statusColor="text-cyber-alert-success"
+            label="CPU Usage"
+            status={metrics ? `${metrics.cpuUsage.toFixed(1)}%` : "Checking..."}
+            statusColor={metrics ? getStatusColor(metrics.cpuUsage) : "text-cyber-alert-warning"}
           />
           <StatusItem
             icon={Database}
-            label="Database"
-            status="Connected"
-            statusColor="text-cyber-alert-success"
+            label="Memory Usage"
+            status={metrics ? `${metrics.memoryUsage.toFixed(1)}%` : "Checking..."}
+            statusColor={metrics ? getStatusColor(metrics.memoryUsage) : "text-cyber-alert-warning"}
           />
           <StatusItem
-            icon={Users}
-            label="Active Users"
-            status="15"
-            statusColor="text-cyber-alert-success"
+            icon={Network}
+            label="Network Load"
+            status={metrics ? `${metrics.networkLoad.toFixed(1)} MB/s` : "Checking..."}
+            statusColor={metrics ? getStatusColor(metrics.networkLoad) : "text-cyber-alert-warning"}
           />
         </div>
       </CardContent>
