@@ -2,49 +2,51 @@
 
 ## Core Security Features
 - Real-time Network Traffic Monitoring
-  - Traffic pattern detection
-  - Bandwidth monitoring
-  - Protocol analysis
-  - Connection state tracking
+  - Live traffic pattern detection using netstat
+  - Real-time bandwidth monitoring via ifstat
+  - Active protocol analysis
+  - Live connection state tracking
 
 - System Security Status
-  - CPU/Memory usage monitoring
-  - Process monitoring
+  - Real-time CPU/Memory monitoring via top
+  - Active process monitoring
   - Service status tracking
   - System logs analysis
 
 - Advanced Threat Detection
-  - Signature-based detection
-  - Anomaly detection
-  - Behavioral analysis
+  - Real-time signature-based detection
+  - Live anomaly detection
+  - Active behavioral analysis
   - Pattern matching
 
 - Firewall Management
-  - Rule configuration
-  - Access control
-  - Port management
-  - Traffic filtering
+  - Live iptables rule configuration
+  - Real-time access control
+  - Active port management
+  - Live traffic filtering
 
-## Technical Capabilities
-- Real-time data processing
-- Custom alert configuration
-- Data visualization
-- Event logging
-- Report generation
+## Technical Requirements
+- Linux operating system
+- Required packages:
+  - top
+  - netstat
+  - ifstat
+  - iptables
+- Root/sudo access for certain operations
+- Network interface access
 
 ## Security Features
 - Role-based access control
 - Encrypted communications
-- Audit logging
+- Real-time audit logging
 - Secure data storage
 
 ## Monitoring Features
-- Network performance metrics
-- System resource utilization
-- Security event tracking
-- Alert management
+- Live network performance metrics
+- Real-time system resource utilization
+- Active security event tracking
+- Immediate alert management
 
-## Demo Mode
-This version includes a demonstration mode that simulates system monitoring data
-for testing and evaluation purposes. For production use, the system can be
-configured to use actual system monitoring tools when deployed on Linux systems.
+## Production Mode
+This version requires proper system access and necessary Linux tools installed.
+Ensure all required packages are installed and proper permissions are set.
