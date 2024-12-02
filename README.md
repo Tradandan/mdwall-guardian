@@ -1,20 +1,31 @@
 # Cybersecurity Dashboard
 
-A modern cybersecurity dashboard with user authentication and firewall management capabilities.
+A private, standalone cybersecurity monitoring solution with real-time threat detection and network analysis capabilities.
 
-## Quick Links
-- [Features](docs/FEATURES.md)
-- [Getting Started](docs/GETTING_STARTED.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [User Guide](docs/USER_GUIDE.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
+## Overview
+This is a private security monitoring tool that provides:
+- Real-time network traffic analysis
+- System performance monitoring
+- Threat detection and alerting
+- Firewall rules management
+- Security event logging
 
-## Repository Details
-- **Tech Stack**: Vite + React + Shadcn/UI + TypeScript
-- **Status**: Private Repository
-- **Branch**: main
-- **Latest Update**: Active development
-- **Maintainer**: @Tradandan
+## Technical Details
+- **Framework**: Vite + React + TypeScript
+- **UI Components**: Shadcn/UI
+- **Visualization**: Recharts
+- **Status**: Private Tool
+- **Latest Update**: Active Development
+- **Maintainer**: Private
+
+## Setup Requirements
+1. Network access to monitored systems
+2. Proper firewall configurations
+3. System logging enabled
+4. Administrative privileges
+
+## Security Notice
+This tool is intended for private use only. Ensure proper security measures are in place before deployment.
 
 ## Support
-For support, please open an issue in the repository.
+For internal use and support only. Not intended for public distribution.

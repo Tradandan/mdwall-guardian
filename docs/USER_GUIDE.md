@@ -1,28 +1,56 @@
 # User Guide
 
-## Authentication
+## System Requirements
+- Administrative access to monitored systems
+- Network connectivity to all monitored endpoints
+- Proper firewall configurations
+- System logging enabled
 
-1. Access the login page at `/login`
-2. Login credentials:
-   - Regular user: any email (without "admin") + password (6+ characters)
-   - Admin user: any email containing "admin" + password (6+ characters)
-   Example:
-   - Admin: admin@company.com / password123
-   - User: user@company.com / password123
+## Authentication
+1. Access requires proper authentication credentials
+2. Role-based access levels:
+   - Administrator: Full system access
+   - Security Analyst: Monitoring and analysis
+   - System Operator: Basic monitoring
 
 ## Dashboard Features
 
-- **Network Traffic**: Real-time network traffic visualization
-- **System Status**: Overview of system health and metrics
-- **Threat Intelligence**: Latest security threats and advisories
-- **Recent Alerts**: Security alerts and notifications
+### Network Traffic Analysis
+- Real-time traffic visualization
+- Protocol breakdown
+- Bandwidth monitoring
+- Anomaly detection
 
-## Firewall Rules Management
+### System Monitoring
+- Resource utilization tracking
+- Service status monitoring
+- Performance metrics
+- Log analysis
 
-1. View existing rules in the Firewall Rules table
-2. Add new rule:
-   - Click "Add Rule"
-   - Fill in rule details
-   - Click "Add Rule" to save
-3. Delete rule:
-   - Click the trash icon next to the rule
+### Threat Intelligence
+- Real-time threat detection
+- Security alerts
+- Incident reporting
+- Threat analysis
+
+### Firewall Management
+1. View current firewall rules
+2. Add new rules:
+   - Define source/destination
+   - Set protocols
+   - Configure ports
+   - Specify actions
+3. Modify existing rules
+4. Delete obsolete rules
+
+## Security Considerations
+- Regular credential updates required
+- Session timeout enforcement
+- Access logging enabled
+- Audit trail maintenance
+
+## Best Practices
+1. Regular system updates
+2. Frequent log review
+3. Alert configuration maintenance
+4. Backup management
